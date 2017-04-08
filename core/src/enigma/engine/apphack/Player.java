@@ -39,6 +39,7 @@ public class Player extends Actor {
 		
 		if (hitPoints <= 0 && !isDead) {
 			die();
+			Game.over = true;
 		}
 		damageCooldown--;
 	}

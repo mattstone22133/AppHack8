@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.environment.AmbientCubemap;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
@@ -38,6 +37,8 @@ public class Game extends ApplicationAdapter {
 	// how intense the blue is
 	private float intensity = 0.05f;
 	private boolean drawLight = true;
+	private boolean win;
+	static boolean over;
 
 	@Override
 	public void create() {
@@ -76,7 +77,7 @@ public class Game extends ApplicationAdapter {
 
 		gameTimer = new GameTimer();
 
-		bk = new Home(0, 0, false);
+		bk = new Home(0, 0, true);
 	}
 
 	private void updateShaders() {
@@ -91,9 +92,11 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		IO();
-		updateCamera();
-		logic();
+		if (!over) {
+			IO();
+			updateCamera();
+			logic();
+		}
 
 		if (drawLight) {
 			renderWithLight();
@@ -129,7 +132,10 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void renderWithLight() {
-
+		if (over) {
+			drawEnd(batch);
+			return;
+		}
 		// DRAW THE LIGHTS
 		batch.setProjectionMatrix(camera.combined);
 		batch.setShader(defaultShader);
@@ -157,16 +163,48 @@ public class Game extends ApplicationAdapter {
 
 		fb.getColorBufferTexture().bind(1);
 		TextureHolder.longLight.bind(0);
+		
+
 
 		// background
 		bg1.render(batch, player.getX(), player.getY());
 		bk.render(batch);
+		for (Home end : ends) {
+			end.render(batch);
+		}
 
 		// actors
 		player.render(batch);
 		// dummy.render(batch);
 		enemy.render(batch);
+		
+		if(gameTimer.shouldDrawInstructions()){
+			drawInstructions();
+		}
 
+		batch.end();
+
+	}
+
+	private void drawInstructions() {
+		batch.draw(TextureHolder.blackbg, -500, -500);		
+		batch.draw(TextureHolder.instructions, -100, -300);		
+	}
+
+	private void drawEnd(SpriteBatch batch) {
+		System.out.println("you win");
+		camera.position.set(0, 0, 0);
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+
+		batch.begin();
+		batch.draw(TextureHolder.blackbg, -400, -400);
+
+		if (win) {
+			batch.draw(TextureHolder.win, -100, 0);
+		} else {
+			batch.draw(TextureHolder.lose, -100, 0);
+		}
 		batch.end();
 
 	}
@@ -197,6 +235,15 @@ public class Game extends ApplicationAdapter {
 					spawnedEnd = true;
 					spawnEnd();
 				}
+
+			}
+		}
+		for (Home end : ends) {
+			if (end.contains(player)) {
+				over = true;
+				win = true;
+				player.setPosition(0, 0);
+				end.setPosition(0, 0);
 			}
 		}
 	}
@@ -209,10 +256,10 @@ public class Game extends ApplicationAdapter {
 		float xOffset = Gdx.graphics.getWidth();
 		float yOffset = Gdx.graphics.getHeight();
 
-		ends.add(new Home(x + xOffset, y + yOffset, true));
-		ends.add(new Home(x + xOffset, y - yOffset, true));
-		ends.add(new Home(x - xOffset, y + yOffset, true));
-		ends.add(new Home(x - xOffset, y - yOffset, true));
+		ends.add(new Home(x + xOffset, y, false));
+		ends.add(new Home(x - xOffset, y, false));
+		ends.add(new Home(x, y + yOffset, false));
+		ends.add(new Home(x, y - yOffset, false));
 
 	}
 
@@ -244,8 +291,8 @@ public class Game extends ApplicationAdapter {
 
 		} else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			player.moveRight();
-		} 
-		if(Gdx.input.isKeyJustPressed(Input.Keys.F)){
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			player.toggleFlashLight();
 		}
 	}
@@ -266,11 +313,14 @@ public class Game extends ApplicationAdapter {
 				intensity -= 0.3f;
 				updateShaders();
 			}
+			if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+				spawnEnd();
+			}
 		}
 	}
-	
+
 	public void resize(int width, int height) {
 		updateCamera();
 		updateShaders();
-    }
+	}
 }
