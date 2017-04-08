@@ -20,6 +20,6 @@ public class BackgroundHandler {
 
 		TextureHolder.grass.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		batch.draw(TextureHolder.grass, 0, 0, 0, 0, 10 * TextureHolder.grass.getWidth(), 10 * TextureHolder.grass.getHeight());
-
+		//this is only in matt's dev branch
 	}
 }

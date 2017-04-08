@@ -11,6 +11,8 @@ public class TextureHolder {
 	public static Texture character;
 	public static TextureRegion[][] characterSpriteSheet;
 	public static Texture grass;
+	public static Texture pointLight;
+	public static Texture longLight;
 
 	public static void initTextures() {
 		character = new Texture("Zelda16x16packed.png");
@@ -19,6 +21,13 @@ public class TextureHolder {
 
 		grass = new Texture("Grass2.png");
 		allTextures.add(grass);
+
+		//lights
+		pointLight = new Texture("light.png");
+		allTextures.add(pointLight);
+		
+		longLight = new Texture("StretchedLight.png");
+		allTextures.add(longLight);
 
 	}
 

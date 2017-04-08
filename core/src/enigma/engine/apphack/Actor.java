@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Actor {
-	private Sprite sprite;
-	private TextureRegion[][] spriteSheet;
-	private float moveSpeed = 10.0f;
+	protected Sprite sprite;
+	protected TextureRegion[][] spriteSheet;
+	protected float moveSpeed = 10.0f;
 
 	public Actor(TextureRegion[][] spriteSheetArg) {
 		this.spriteSheet = spriteSheetArg;
