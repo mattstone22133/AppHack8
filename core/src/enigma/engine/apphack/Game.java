@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.environment.AmbientCubemap;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class Game extends ApplicationAdapter {
 	protected static boolean dev = true;
 	private SpriteBatch batch;
-	private OrthographicCamera camera;
+	protected static OrthographicCamera camera;
 	private Actor enemy;
-	static OrthographicCamera camera;
 	private Player player;
 
 	private Actor dummy;
@@ -26,7 +26,7 @@ public class Game extends ApplicationAdapter {
 	private ShaderProgram fragShader;
 
 	private FrameBuffer fb;
-	
+
 	// how intense the blue is
 	private float intensity = 0.7f;
 	private boolean drawLight = false;
@@ -42,11 +42,9 @@ public class Game extends ApplicationAdapter {
 		player = new Player(TextureHolder.characterSpriteSheet);
 		player.setScale(3.0f);
 
-
-		
 		enemy = new Enemy(TextureHolder.characterSpriteSheet);
 		enemy.setScale(3.0f);
-		enemy.setPosition(-100f,-100f);
+		enemy.setPosition(-100f, -100f);
 
 		dummy = new Actor(TextureHolder.characterSpriteSheet);
 		dummy.setScale(3.0f);
@@ -67,7 +65,7 @@ public class Game extends ApplicationAdapter {
 
 	private void updateShaders() {
 		fb = new FrameBuffer(Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-		
+
 		fragShader.begin();
 		fragShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		fragShader.setUniformi("u_lightmap", 1);
@@ -87,11 +85,10 @@ public class Game extends ApplicationAdapter {
 			renderNoLight();
 		}
 
-	
 	}
 
 	private void renderNoLight() {
-		//batch.setShader(fragShader);
+		// batch.setShader(fragShader);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -107,44 +104,43 @@ public class Game extends ApplicationAdapter {
 		// actors
 		player.render(batch);
 		enemy.render(batch);
-		//dummy.render(batch);
+		// dummy.render(batch);
 
 		batch.end();
-		
+
 	}
 
 	private void renderWithLight() {
-		
+
 		// DRAW THE LIGHTS
 		batch.setProjectionMatrix(camera.combined);
 		batch.setShader(normalFragmentShader);
 		fb.begin();
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			batch.setBlendFunction(GL20.GL_DST_COLOR, GL20.GL_SRC_ALPHA);
-			batch.begin();
-				LongLight.render(batch);		
-		
-				batch.end();
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.setBlendFunction(GL20.GL_DST_COLOR, GL20.GL_SRC_ALPHA);
+		batch.begin();
+		LongLight.render(batch);
+
+		batch.end();
 		fb.end();
-		
-		
+
 		// DRAW THE WORLD
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setShader(fragShader);
-		batch.setBlendFunction(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
+		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin();
-		
-			fb.getColorBufferTexture().bind(0);
-			TextureHolder.character.bind(1);
 
-			// background
-			bg1.render(batch, player.getX(), player.getY());
+		fb.getColorBufferTexture().bind(0);
+		TextureHolder.character.bind(1);
 
-			// actors
-			player.render(batch);
-			dummy.render(batch);
+		// background
+		bg1.render(batch, player.getX(), player.getY());
+
+		// actors
+		player.render(batch);
+		dummy.render(batch);
 
 		batch.end();
 
@@ -156,7 +152,7 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void logic() {
-		((Enemy) enemy).logic((Player)player);
+		((Enemy) enemy).logic((Player) player);
 
 		player.logic(dummy);
 
@@ -171,8 +167,7 @@ public class Game extends ApplicationAdapter {
 
 	public void IO() {
 		devIO();
-		
-		
+
 		// Player io
 		if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			player.moveUp();
