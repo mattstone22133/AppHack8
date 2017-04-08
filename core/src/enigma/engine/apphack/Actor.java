@@ -2,8 +2,6 @@ package enigma.engine.apphack;
 
 import java.awt.geom.Point2D;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,6 +10,7 @@ public class Actor {
 	protected Sprite sprite;
 	protected TextureRegion[][] spriteSheet;
 	protected float moveSpeed = 10.0f;
+
 	protected float lastUpdatePos;
 	protected int textureRegionRow = 0;
 	protected int textureRegionCol = 0;
@@ -24,6 +23,9 @@ public class Actor {
 
 	protected direction actorFacingDirection = direction.DOWN;
 
+	protected float scale = 1.0f;
+
+
 	public Actor(TextureRegion[][] spriteSheetArg) {
 		this.spriteSheet = spriteSheetArg;
 		sprite = new Sprite(spriteSheet[0][0]);
@@ -33,6 +35,7 @@ public class Actor {
 	private Point2D.Float oriPosition = new Point2D.Float(0, 0);
 
 	public void setScale(float scale) {
+		this.scale = scale;
 		this.sprite.setScale(scale);
 		oriPosition.setLocation(sprite.getX(), sprite.getY());
 
@@ -111,5 +114,13 @@ public class Actor {
 	public void setPosition(float x, float y) {
 		sprite.setX(x);
 		sprite.setY(y);		
+	}
+
+	public float getWidth() {
+		return sprite.getWidth();
+	}
+
+	public float getHeight() {
+		return sprite.getHeight();
 	}
 }
