@@ -12,6 +12,7 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Actor player;
+	private Actor enemy;
 	private Actor dummy;
 	private BackgroundHandler bg1;
 
@@ -26,8 +27,12 @@ public class Game extends ApplicationAdapter {
 		player = new Player(TextureHolder.characterSpriteSheet);
 		player.setScale(3.0f);
 
-		dummy = new Actor(TextureHolder.characterSpriteSheet);
-		dummy.setScale(3.0f);
+		//dummy = new Actor(TextureHolder.characterSpriteSheet);
+		//dummy.setScale(3.0f);
+		
+		enemy = new Enemy(TextureHolder.characterSpriteSheet);
+		enemy.setScale(3.0f);
+		enemy.setPosition(-100f,-100f);
 		
 		bg1 = new BackgroundHandler(TextureHolder.grass);
 
@@ -55,7 +60,8 @@ public class Game extends ApplicationAdapter {
 
 		// actors
 		player.render(batch);
-		dummy.render(batch);
+		enemy.render(batch);
+		//dummy.render(batch);
 
 		batch.end();
 	}
@@ -67,7 +73,7 @@ public class Game extends ApplicationAdapter {
 
 	private void logic() {
 		// TODO Auto-generated method stub
-
+		((Enemy) enemy).logic((Player)player);
 	}
 
 	@Override
