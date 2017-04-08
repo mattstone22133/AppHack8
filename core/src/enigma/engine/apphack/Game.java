@@ -35,7 +35,7 @@ public class Game extends ApplicationAdapter {
 	private FrameBuffer fb;
 
 	// how intense the blue is
-	private float intensity = 0.1f;
+	private float intensity = 0.05f;
 	private boolean drawLight = true;
 	private boolean win;
 	static boolean over;
@@ -58,6 +58,7 @@ public class Game extends ApplicationAdapter {
 
 		dummy = new Actor(TextureHolder.characterSpriteSheet);
 		dummy.setScale(3.0f);
+		
 
 		bg1 = new BackgroundHandler(TextureHolder.grass);
 

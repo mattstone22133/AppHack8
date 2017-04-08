@@ -21,7 +21,7 @@ public class Enemy extends Actor
 
 	public Enemy(TextureRegion[][] spriteSheetArg) {
 		super(spriteSheetArg);
-		moveSpeed = 9f;
+		moveSpeed = 11f;
 		playerPos = new Point2D.Float(0, 0);
 		
 		
@@ -151,10 +151,6 @@ public class Enemy extends Actor
 				sprite.setPosition(playerPos.x, playerPos.y + 900); //move it out of sight
 				suspenseTimer--;
 			}
-		}
-		
-		if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-			moveToRandomLocation(player);
 		}
 		
 	}

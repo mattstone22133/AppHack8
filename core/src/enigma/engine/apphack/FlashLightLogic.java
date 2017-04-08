@@ -26,30 +26,44 @@ public class FlashLightLogic {
 			//System.out.println(count);
 			//period 1
 			if(count > first && count < first + 50){
+				//SoundHolder.buzz1.play(.1f);
 				return false;
 			}
 			
 			//period 2
+
 			if(count > second && count < second + 10){
+        				//SoundHolder.buzz1.play(.1f);
+
 				return false;
 			}
 			
 			//period 3
+
 			if(count > third && count < third + 10){
+        				//SoundHolder.buzz2.play(.1f);
+
 				return false;
 			}
 			
 			//period 4
+
 			if(count > fourth && count < fourth + 10){
+        		//SoundHolder.buzz3.play(.1f);
+
 				return false;
 			}
 			
 			//period 5
+
 			if(count > fifth && count < fifth + 10){
+        				//SoundHolder.buzz4.play(.1f);
+
 				return false;
 			}
 			
 			if(count > shutoff && count < toggleOff){
+				//SoundHolder.buzz1.play(.1f);
 				return false;
 			}
 			
