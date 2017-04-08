@@ -12,7 +12,7 @@ public class FlashLightLogic {
 
 	}
 
-	public boolean logic(){
+	public boolean logic() {
 		long first = 300;
 		long second = 1000;
 		long third = 1550;
@@ -20,61 +20,61 @@ public class FlashLightLogic {
 		long fifth = 1650;
 		long shutoff = 1700;
 		long toggleOff = 2000;
-		
-		if(toggle){
+
+		if (toggle) {
 			count += 2;
-			//System.out.println(count);
-			//period 1
-			if(count > first && count < first + 50){
-				//SoundHolder.buzz1.play(.1f);
+			// System.out.println(count);
+			// period 1
+			if (count > first && count < first + 50) {
+				SoundHolder.buzz1.play(.1f);
 				return false;
 			}
-			
-			//period 2
 
-			if(count > second && count < second + 10){
-        				//SoundHolder.buzz1.play(.1f);
+			// period 2
 
-				return false;
-			}
-			
-			//period 3
-
-			if(count > third && count < third + 10){
-        				//SoundHolder.buzz2.play(.1f);
+			if (count > second && count < second + 10) {
+				SoundHolder.buzz1.play(.1f);
 
 				return false;
 			}
-			
-			//period 4
 
-			if(count > fourth && count < fourth + 10){
-        		//SoundHolder.buzz3.play(.1f);
+			// period 3
 
-				return false;
-			}
-			
-			//period 5
-
-			if(count > fifth && count < fifth + 10){
-        				//SoundHolder.buzz4.play(.1f);
+			if (count > third && count < third + 10) {
+				SoundHolder.buzz2.play(.1f);
 
 				return false;
 			}
-			
-			if(count > shutoff && count < toggleOff){
-				//SoundHolder.buzz1.play(.1f);
+
+			// period 4
+
+			if (count > fourth && count < fourth + 10) {
+				 SoundHolder.buzz3.play(.1f);
+
 				return false;
 			}
-			
-			if(count > toggleOff){
+
+			// period 5
+
+			if (count > fifth && count < fifth + 10) {
+				 SoundHolder.buzz4.play(.1f);
+
+				return false;
+			}
+
+			if (count > shutoff && count < toggleOff) {
+				 //SoundHolder.buzz1.play(.1f);
+				return false;
+			}
+
+			if (count > toggleOff) {
 				count--;
 				return false;
 			}
-			//shutoff
-			return true; 
+			// shutoff
+			return true;
 		} else {
-			if(count <= 0){
+			if (count <= 0) {
 				return false;
 			}
 			count -= 2;

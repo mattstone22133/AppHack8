@@ -49,7 +49,7 @@ public class TextureHolder {
 		win = new Texture("youwin.png");
 		allTextures.add(win);
 
-		lose = new Texture("youlose.png");
+		lose = new Texture("youlose2.png");
 		allTextures.add(lose);
 
 		blackbg = new Texture("blackbg.png");

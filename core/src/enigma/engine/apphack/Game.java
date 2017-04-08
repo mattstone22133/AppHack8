@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 
 public class Game extends ApplicationAdapter {
-	protected static boolean dev = true;
+	protected static boolean dev = false;
 	private SpriteBatch batch;
 	protected static OrthographicCamera camera;
 	private Actor enemy;
