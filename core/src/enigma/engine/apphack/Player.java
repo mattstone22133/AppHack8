@@ -27,6 +27,23 @@ public class Player extends Actor {
 		}
 
 		checkCollision(enemy);
+		
+		
+		if (getDistanceFromEnemy(enemy) < 60 && damageCooldown <= 0) {
+			hitPoints -= 25;
+			damageCooldown = 51;
+		}
+		
+		if (hitPoints <= 0) {
+			die();
+		}
+		damageCooldown--;
+	}
+	
+	
+	public float getDistanceFromEnemy(Actor enemy) {
+		float dist = ((sprite.getX() - enemy.getX()) * (sprite.getX() - enemy.getX())) + ((sprite.getY() - enemy.getY()) * (sprite.getY() - enemy.getY()));
+		return (float) Math.sqrt(dist);
 	}
 
 	private void checkCollision(Actor enemy) {

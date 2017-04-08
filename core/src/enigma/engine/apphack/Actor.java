@@ -2,6 +2,8 @@ package enigma.engine.apphack;
 
 import java.awt.geom.Point2D;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +18,8 @@ public class Actor {
 	protected int textureRegionCol = 0;
 	protected static final int MAXDISTFROMLASTPOS = 40;
 	protected float hitPoints = 100;
+	protected float damageCooldown = 0;
+	
 
 	protected enum direction {
 		UP, DOWN, LEFT, RIGHT
@@ -87,12 +91,25 @@ public class Actor {
 	public float getHp() {
 		return hitPoints;
 	}
+	
+	public void die() {
+		System.out.println("DEAD!!!");
+	}
 
 	public void updateSpriteImage(direction dir) {
 		if (actorFacingDirection == dir) {
 			if (Math.abs((sprite.getX() + sprite.getY()) - lastUpdatePos) > MAXDISTFROMLASTPOS) {
 				lastUpdatePos = sprite.getX() + sprite.getY();
-				textureRegionRow = (textureRegionRow % 2 == 0) ? 1 : 0; 
+				
+				if (textureRegionRow % 2 == 0) {
+					textureRegionRow = 1;
+					playRFootSound();
+				}
+				else {
+					textureRegionRow = 0;
+					playLFootSound();
+				}
+				
 			}
 		} else {
 			actorFacingDirection = dir;
@@ -109,6 +126,14 @@ public class Actor {
 		
 		sprite.setRegion(spriteSheet[textureRegionRow][textureRegionCol]);
 		
+	}
+	
+	public void playRFootSound() {
+		SoundHolder.rightFootStepHum.play(.03f);
+	}
+	
+	public void playLFootSound() {
+		SoundHolder.leftFootStepHum.play(.03f);
 	}
 
 	public void setPosition(float x, float y) {

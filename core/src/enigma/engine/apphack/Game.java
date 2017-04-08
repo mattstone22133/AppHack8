@@ -42,7 +42,7 @@ public class Game extends ApplicationAdapter {
 		player = new Player(TextureHolder.characterSpriteSheet);
 		player.setScale(3.0f);
 
-		enemy = new Enemy(TextureHolder.characterSpriteSheet);
+		enemy = new Enemy(TextureHolder.enemySpriteSheet);
 		enemy.setScale(3.0f);
 		enemy.setPosition(-100f, -100f);
 
@@ -154,7 +154,7 @@ public class Game extends ApplicationAdapter {
 	private void logic() {
 		((Enemy) enemy).logic((Player) player);
 
-		player.logic(dummy);
+		player.logic(enemy);
 
 	}
 
