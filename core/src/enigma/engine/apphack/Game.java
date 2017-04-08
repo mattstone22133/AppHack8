@@ -48,7 +48,7 @@ public class Game extends ApplicationAdapter {
 
 		
 		// background
-		bg1.render(batch, 0, 0);
+		bg1.render(batch, player.getX(), player.getY());
 		
 		//lighting (this should be drawn before background when shaders are employed)
 		LongLight.render(batch);
