@@ -31,8 +31,8 @@ public class Player extends Actor {
 		checkCollision(enemy);
 		
 		
-		if (getDistanceFromEnemy(enemy) < 60 && damageCooldown <= 0) {
-			hitPoints -= 25;
+		if (getDistanceFromEnemy(enemy) < 60 && damageCooldown <= 0 && !isDead) {
+			hitPoints -= 34;
 			damageCooldown = 26;
 			SoundHolder.humanPain.play(.2f);
 		}
