@@ -13,8 +13,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 public class Game extends ApplicationAdapter {
 	protected static boolean dev = true;
 	private SpriteBatch batch;
+	private OrthographicCamera camera;
+	private Actor enemy;
 	static OrthographicCamera camera;
 	private Player player;
+
 	private Actor dummy;
 	private BackgroundHandler bg1;
 
@@ -38,6 +41,12 @@ public class Game extends ApplicationAdapter {
 		// All dependent initializations are safe
 		player = new Player(TextureHolder.characterSpriteSheet);
 		player.setScale(3.0f);
+
+
+		
+		enemy = new Enemy(TextureHolder.characterSpriteSheet);
+		enemy.setScale(3.0f);
+		enemy.setPosition(-100f,-100f);
 
 		dummy = new Actor(TextureHolder.characterSpriteSheet);
 		dummy.setScale(3.0f);
@@ -97,7 +106,8 @@ public class Game extends ApplicationAdapter {
 
 		// actors
 		player.render(batch);
-		dummy.render(batch);
+		enemy.render(batch);
+		//dummy.render(batch);
 
 		batch.end();
 		
@@ -146,7 +156,10 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void logic() {
+		((Enemy) enemy).logic((Player)player);
+
 		player.logic(dummy);
+
 	}
 
 	@Override
