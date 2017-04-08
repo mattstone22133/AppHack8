@@ -24,7 +24,7 @@ public class SoundHolder {
 		rightFootStepEnemy = Gdx.audio.newSound(Gdx.files.internal("working sound/Clown/walking/right foot.ogg"));
 		mcDWhistle = Gdx.audio.newSound(Gdx.files.internal("working sound/Clown/sound/McDonalds whistle.ogg"));
 		humanPain = Gdx.audio.newSound(Gdx.files.internal("working sound/hum/sounds/huminpain.ogg"));
-		humanDead = Gdx.audio.newSound(Gdx.files.internal("working sound/hum/sounds/humDead.ogg"));
+		humanDead = Gdx.audio.newSound(Gdx.files.internal("working sound/hum/sounds/humdead.ogg"));
 		mcDLaugh = Gdx.audio.newSound(Gdx.files.internal("working sound/Clown/sound/McDonalds laugh.ogg"));
 		buzz1 = Gdx.audio.newSound(Gdx.files.internal("working sound/lightsounds/dyinglight1.ogg"));
 		buzz2 = Gdx.audio.newSound(Gdx.files.internal("working sound/lightsounds/dyinglight2.ogg"));
