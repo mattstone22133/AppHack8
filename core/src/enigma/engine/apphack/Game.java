@@ -203,7 +203,7 @@ public class Game extends ApplicationAdapter {
 		if (win) {
 			batch.draw(TextureHolder.win, -100, 0);
 		} else {
-			batch.draw(TextureHolder.lose, -100, 0);
+			//batch.draw(TextureHolder.lose, -100, 0);
 		}
 		batch.end();
 
