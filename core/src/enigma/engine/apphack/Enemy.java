@@ -12,9 +12,10 @@ public class Enemy extends Actor
 	protected Point2D.Float playerPos;
 	protected int ttatimer = 0; //time 'till attack
 	protected int timeUntilNextMotionChange = 0;
+	protected int suspenseTimer = 0;
 	protected Random rand = new Random();
 	//protected Point2D.Float randomPosition = new Point2D.Float(0, 0);
-	protected enum states {ATTACKING, WAITING, FLEEING, START};
+	protected enum states {ATTACKING, WAITING, FLEEING, START, SUSPENSE};
 	protected states currentState = states.START;
 	
 
@@ -92,9 +93,18 @@ public class Enemy extends Actor
 			
 			//same code as attacking but runs away instead of towards.
 			
-			if (dist > 1000) {
-				moveToRandomLocation(player);
-				ttatimer = 50; //shorter time if player is running away
+			if (dist > 900) {
+				
+				if (rand.nextInt(15) == 1) {
+					System.out.println(rand.nextInt(3));
+					
+					createSuspense();
+				}
+				else {
+					moveToRandomLocation(player);
+					ttatimer = 50; //shorter time if player is running away
+				}		
+				
 			}
 			
 			if (timeUntilNextMotionChange <= 0) {
@@ -132,11 +142,26 @@ public class Enemy extends Actor
 				timeUntilNextMotionChange--;				
 			}
 		}
+		else if(currentState == states.SUSPENSE) {
+			if (suspenseTimer <= 0) {
+				moveToRandomLocation(player);
+				SoundHolder.mcDWhistle.play();
+			}
+			else {
+				sprite.setPosition(playerPos.x, playerPos.y + 900); //move it out of sight
+				suspenseTimer--;
+			}
+		}
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 			moveToRandomLocation(player);
 		}
 		
+	}
+	
+	public void createSuspense() {
+		currentState = states.SUSPENSE;
+		suspenseTimer = rand.nextInt(1000) + 500;
 	}
 	
 	public float getDistanceFromPlayer() {
