@@ -39,6 +39,7 @@ public class BackgroundHandler {
 		
 			
 		TextureHolder.grass.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
 		//center Tile
 		batch.draw(TextureHolder.grass, grassTileCenter.x - GRASSTILEOFFSET, grassTileCenter.y - GRASSTILEOFFSET, 0, 0, GRASSTILESIZE * TextureHolder.grass.getWidth(), GRASSTILESIZE * TextureHolder.grass.getHeight());
 		//leftTile
@@ -62,7 +63,6 @@ public class BackgroundHandler {
 
 		
 		//batch.draw(region, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
-		
 
 	}
 }

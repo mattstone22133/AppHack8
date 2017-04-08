@@ -23,7 +23,7 @@ public class Game extends ApplicationAdapter {
 		SoundHolder.initSounds();
 
 		// All dependent initializations are safe
-		player = new Actor(TextureHolder.characterSpriteSheet);
+		player = new Player(TextureHolder.characterSpriteSheet);
 		player.setScale(3.0f);
 
 		dummy = new Actor(TextureHolder.characterSpriteSheet);
@@ -46,9 +46,12 @@ public class Game extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
+		
 		// background
 		bg1.render(batch, player.getX(), player.getY());
 		
+		//lighting (this should be drawn before background when shaders are employed)
+		LongLight.render(batch);
 
 		// actors
 		player.render(batch);
