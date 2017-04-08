@@ -1,5 +1,7 @@
 package enigma.engine.apphack;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,9 +9,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.environment.AmbientCubemap;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Vector3;
 
 public class Game extends ApplicationAdapter {
 	protected static boolean dev = true;
@@ -18,18 +20,23 @@ public class Game extends ApplicationAdapter {
 	private Actor enemy;
 	private Player player;
 
+	private ArrayList<Home> ends = new ArrayList<Home>();
+	
 	private Actor dummy;
 	private BackgroundHandler bg1;
+	private GameTimer gameTimer;
 
-	private ShaderProgram normalFragmentShader;
+	private ShaderProgram defaultShader;
 	private ShaderProgram vertexShader;
-	private ShaderProgram fragShader;
+	private ShaderProgram finalShader;
+	protected Vector3 blueColor = new Vector3(0.3f, 0.3f, 0.7f);
+	protected PointLight pntLight;
 
 	private FrameBuffer fb;
 
 	// how intense the blue is
-	private float intensity = 0.7f;
-	private boolean drawLight = false;
+	private float intensity = 0.5f;
+	private boolean drawLight = true;
 
 	@Override
 	public void create() {
@@ -51,26 +58,31 @@ public class Game extends ApplicationAdapter {
 
 		bg1 = new BackgroundHandler(TextureHolder.grass);
 
-		String normalFragShader = Gdx.files.internal("normalShader.glsl").readString();
-		String fragShaderString = Gdx.files.internal("fragmentShader.glsl").readString();
-		String vertexShader = Gdx.files.internal("fragmentShader.glsl").readString();
+		pntLight = new PointLight();
+		pntLight.setScale(0.6f);
+
+		String defaultPixelShader = Gdx.files.internal("defaultPixelShader.glsl").readString();
+		String finalShaderString = Gdx.files.internal("pixelShader.glsl").readString();
+		String vertexShader = Gdx.files.internal("vertexShader.glsl").readString();
 
 		ShaderProgram.pedantic = false;
-		normalFragmentShader = new ShaderProgram(vertexShader, normalFragShader);
-		fragShader = new ShaderProgram(vertexShader, fragShaderString);
+		defaultShader = new ShaderProgram(vertexShader, defaultPixelShader);
+		finalShader = new ShaderProgram(vertexShader, finalShaderString);
 
 		updateShaders();
+		
+		gameTimer = new GameTimer();
 
 	}
 
 	private void updateShaders() {
 		fb = new FrameBuffer(Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
-		fragShader.begin();
-		fragShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		fragShader.setUniformi("u_lightmap", 1);
-		fragShader.setUniformf("ambientColor", 0.3f, 0.3f, 0.7f, intensity);
-		fragShader.end();
+		finalShader.begin();
+		finalShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		finalShader.setUniformi("u_lightmap", 1);
+		finalShader.setUniformf("ambientColor", blueColor.x, blueColor.y, blueColor.z, intensity);
+		finalShader.end();
 	}
 
 	@Override
@@ -100,6 +112,8 @@ public class Game extends ApplicationAdapter {
 
 		// lighting (this should be drawn before background when shaders are employed)
 		LongLight.render(batch);
+		PointLight.render(batch);
+		pntLight.setXY(player.getCenterX(), player.getCenterY());
 
 		// actors
 		player.render(batch);
@@ -114,33 +128,39 @@ public class Game extends ApplicationAdapter {
 
 		// DRAW THE LIGHTS
 		batch.setProjectionMatrix(camera.combined);
-		batch.setShader(normalFragmentShader);
+		batch.setShader(defaultShader);
 		fb.begin();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.setBlendFunction(GL20.GL_DST_COLOR, GL20.GL_SRC_ALPHA);
+		int src = batch.getBlendSrcFunc();
+		int dst = batch.getBlendDstFunc();
+		batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_SRC_ALPHA);
 		batch.begin();
+		pntLight.setXY(player.getCenterX(), player.getCenterY());
+
 		LongLight.render(batch);
+		PointLight.render(batch);
 
 		batch.end();
 		fb.end();
+		batch.setBlendFunction(src, dst);
 
 		// DRAW THE WORLD
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		batch.setShader(finalShader);
+		// Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.setShader(fragShader);
-		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin();
 
-		fb.getColorBufferTexture().bind(0);
-		TextureHolder.character.bind(1);
+		fb.getColorBufferTexture().bind(1);
+		TextureHolder.longLight.bind(0);
 
 		// background
 		bg1.render(batch, player.getX(), player.getY());
 
 		// actors
 		player.render(batch);
-		dummy.render(batch);
+		// dummy.render(batch);
+		enemy.render(batch);
 
 		batch.end();
 
@@ -152,10 +172,47 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void logic() {
+		startLogic();
+		endLogic();
+		
+		
 		((Enemy) enemy).logic((Player) player);
 
 		player.logic(enemy);
 
+
+	}
+
+	private void endLogic() {
+		if(gameTimer.hasStarted()){
+			//if the game has lived for a long enough time, spawn the house to win.
+			if(gameTimer.gameTimeOver()){
+				spawnEnd();
+			}
+		}
+	}
+
+	private void spawnEnd() {
+		//spawn 4 homes in each direction
+		float x = player.getX();
+		float y = player.getY();
+		
+		float xOffset = Gdx.graphics.getWidth() ;
+		float yOffset = Gdx.graphics.getHeight();
+		
+		ends.add(new Home(x + xOffset, y + yOffset));
+		ends.add(new Home(x + xOffset, y - yOffset));
+		ends.add(new Home(x - xOffset, y + yOffset));
+		ends.add(new Home(x - xOffset, y - yOffset));
+
+		
+	}
+
+	private void startLogic() {
+		if(gameTimer.attemptStart(player)){
+			//start ronand
+		} 
+		gameTimer.logic();
 	}
 
 	@Override
