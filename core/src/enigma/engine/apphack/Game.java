@@ -47,7 +47,7 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 
 		// background
-		bg1.render(batch, 0, 0);
+		bg1.render(batch, player.getX(), player.getY());
 		
 
 		// actors
