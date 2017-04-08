@@ -8,5 +8,5 @@ varying vec2 vTexCoord;
 void main() {
 	vColor = a_color;
 	vTexCoord = a_texCoord0;
-	gl_Position = u_projTrans * a_position;
+	gl_Position = u_projTrans * a_position;		
 }

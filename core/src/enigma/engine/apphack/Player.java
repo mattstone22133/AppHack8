@@ -11,7 +11,7 @@ public class Player extends Actor {
 	public Player(TextureRegion[][] spriteSheetArg) {
 		super(spriteSheetArg);
 		flashLight = new LongLight();
-		flashLight.setScale(0.5f);
+		flashLight.setScale(0.7f);
 
 	}
 
@@ -32,7 +32,10 @@ public class Player extends Actor {
 	private void checkCollision(Actor enemy) {
 		if(flashLight.collision(this, enemy)){
 			// System.out.println("collision detected on enemy" + enemy.toString());
-			
+			if(enemy instanceof Enemy){
+				Enemy enemyCast = (Enemy) enemy;
+				enemyCast.runAway();
+			}
 		} else {
 		}
 	}
@@ -84,5 +87,15 @@ public class Player extends Actor {
 		super.moveRight();
 		updateFlashLight();
 	}
+
+	public float getCenterX() {
+		return sprite.getX() + sprite.getWidth() * scale /2;
+	}
+
+	public float getCenterY() {
+		return sprite.getY() + sprite.getHeight() * scale /2;
+
+	}
+
 
 }

@@ -8,11 +8,13 @@ precision mediump float;
 varying LOWP vec4 vColor;
 varying vec2 vTexCoord;
 
-uniform sampler2D u_texture;
-uniform sampler2D u_lightmap;
+//texture samplers
+uniform sampler2D u_texture; //diffuse map
+uniform sampler2D u_lightmap;   //light map
 
-uniform vec2 resolution;
-uniform LOWP vec4 ambientColor;
+//additional parameters for the shader
+uniform vec2 resolution; //resolution of screen
+uniform LOWP vec4 ambientColor; //ambient RGB, alpha channel is intensity 
 
 void main() {
 	vec4 diffuseColor = texture2D(u_texture, vTexCoord);
