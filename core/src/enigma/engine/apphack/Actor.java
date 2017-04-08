@@ -18,26 +18,13 @@ public class Actor {
 		sprite = new Sprite(spriteSheet[0][0]);
 	}
 
-	public void io() {
-		if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			sprite.translateY(moveSpeed);
-		} else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			sprite.translateY(-moveSpeed);
-
-		} else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			sprite.translateX(-moveSpeed);
-
-		} else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			sprite.translateX(moveSpeed);
-		}
-	}
-	
 	private Point2D.Float oriPosition = new Point2D.Float(0, 0);
+
 	public void setScale(float scale) {
 		this.sprite.setScale(scale);
 		oriPosition.setLocation(sprite.getX(), sprite.getY());
-		
-		//do unit magic at 0, 0
+
+		// do unit magic at 0, 0
 		sprite.setPosition(0, 0);
 		sprite.setOrigin(sprite.getX(), sprite.getY());
 		sprite.setPosition(oriPosition.x, oriPosition.y);
@@ -48,5 +35,30 @@ public class Actor {
 		if (sprite != null) {
 			sprite.draw(batch);
 		}
+	}
+
+	public float getX() {
+		// TODO make this centered.
+		return sprite.getX();
+	}
+
+	public float getY() {
+		return sprite.getY();
+	}
+
+	public void moveUp() {
+		sprite.translateY(moveSpeed);
+	}
+
+	public void moveDown() {
+		sprite.translateY(-moveSpeed);
+	}
+
+	public void moveLeft() {
+		sprite.translateX(-moveSpeed);
+	}
+
+	public void moveRight() {
+		sprite.translateX(moveSpeed);
 	}
 }
