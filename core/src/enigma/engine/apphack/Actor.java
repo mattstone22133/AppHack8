@@ -19,6 +19,7 @@ public class Actor {
 	protected static final int MAXDISTFROMLASTPOS = 40;
 	protected float hitPoints = 100;
 	protected float damageCooldown = 0;
+	protected boolean isDead = false;
 	
 
 	protected enum direction {
@@ -93,7 +94,12 @@ public class Actor {
 	}
 	
 	public void die() {
-		System.out.println("DEAD!!!");
+		if (!isDead) {
+			System.out.println("DEAD!!!");
+			SoundHolder.humanDead.play(.1f);
+			SoundHolder.mcDLaugh.play(.5f);
+			isDead = true;
+		}		
 	}
 
 	public void updateSpriteImage(direction dir) {
