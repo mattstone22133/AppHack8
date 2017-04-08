@@ -122,6 +122,14 @@ public class LongLight {
 		// return pointInBox(eNewX, eNewY, blBoxX, blBoxY);
 	}
 
+	public void setOnOff(boolean onOff) {
+		active = onOff;
+	}
+
+	public boolean getOnOff() {
+		return active;
+	}
+
 //	private boolean pointInBox(float x, float y, float blBoxX, float blBoxY) {
 //
 //		// check if X in range
