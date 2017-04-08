@@ -15,6 +15,7 @@ public class TextureHolder {
 	public static Texture grass;
 	public static Texture pointLight;
 	public static Texture longLight;
+	public static Texture home;
 
 	public static void initTextures() {
 		character = new Texture("Man16x16packed.png");
@@ -27,12 +28,15 @@ public class TextureHolder {
 		grass = new Texture("Grass2.png");
 		allTextures.add(grass);
 
-		//lights
+		// lights
 		pointLight = new Texture("light.png");
 		allTextures.add(pointLight);
-		
+
 		longLight = new Texture("StretchedLight.png");
 		allTextures.add(longLight);
+
+		home = new Texture("homedone.png");
+		allTextures.add(home);
 
 	}
 

@@ -2,8 +2,6 @@ package enigma.engine.apphack;
 
 import java.awt.geom.Point2D;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,7 +17,6 @@ public class Actor {
 	protected static final int MAXDISTFROMLASTPOS = 40;
 	protected float hitPoints = 100;
 	protected float damageCooldown = 0;
-	
 
 	protected enum direction {
 		UP, DOWN, LEFT, RIGHT
@@ -28,7 +25,6 @@ public class Actor {
 	protected direction actorFacingDirection = direction.DOWN;
 
 	protected float scale = 1.0f;
-
 
 	public Actor(TextureRegion[][] spriteSheetArg) {
 		this.spriteSheet = spriteSheetArg;
@@ -66,32 +62,52 @@ public class Actor {
 
 	public void moveUp() {
 		sprite.translateY(moveSpeed);
+		if (Game.bk.contains(this)) {
+			//restore location
+			sprite.translateY(-moveSpeed);
+			return;
+		}
 		updateSpriteImage(direction.UP);
 	}
 
 	public void moveDown() {
 		sprite.translateY(-moveSpeed);
+		if (Game.bk.contains(this)) {
+			//restore location
+			sprite.translateY(moveSpeed);
+			return;
+		}
 		updateSpriteImage(direction.DOWN);
 	}
 
 	public void moveLeft() {
 		sprite.translateX(-moveSpeed);
+		if (Game.bk.contains(this)) {
+			//restore location
+			sprite.translateX(moveSpeed);
+			return;
+		}
 		updateSpriteImage(direction.LEFT);
 	}
 
 	public void moveRight() {
 		sprite.translateX(moveSpeed);
+		if (Game.bk.contains(this)) {
+			//restore location
+			sprite.translateX(-moveSpeed);
+			return;
+		}
 		updateSpriteImage(direction.RIGHT);
 	}
-	
+
 	public void alterHP(float deltaHP) {
 		hitPoints += deltaHP;
 	}
-	
+
 	public float getHp() {
 		return hitPoints;
 	}
-	
+
 	public void die() {
 		System.out.println("DEAD!!!");
 	}
@@ -100,16 +116,15 @@ public class Actor {
 		if (actorFacingDirection == dir) {
 			if (Math.abs((sprite.getX() + sprite.getY()) - lastUpdatePos) > MAXDISTFROMLASTPOS) {
 				lastUpdatePos = sprite.getX() + sprite.getY();
-				
+
 				if (textureRegionRow % 2 == 0) {
 					textureRegionRow = 1;
 					playRFootSound();
-				}
-				else {
+				} else {
 					textureRegionRow = 0;
 					playLFootSound();
 				}
-				
+
 			}
 		} else {
 			actorFacingDirection = dir;
@@ -123,22 +138,30 @@ public class Actor {
 				textureRegionCol = 3;
 			}
 		}
-		
+
 		sprite.setRegion(spriteSheet[textureRegionRow][textureRegionCol]);
-		
+
 	}
 	
+	public float getScaledWidth(){
+		return sprite.getWidth() * scale;
+	}
+	
+	public float getScaledHeight(){
+		return sprite.getHeight() * scale;
+	}
+
 	public void playRFootSound() {
 		SoundHolder.rightFootStepHum.play(.03f);
 	}
-	
+
 	public void playLFootSound() {
 		SoundHolder.leftFootStepHum.play(.03f);
 	}
 
 	public void setPosition(float x, float y) {
 		sprite.setX(x);
-		sprite.setY(y);		
+		sprite.setY(y);
 	}
 
 	public float getWidth() {

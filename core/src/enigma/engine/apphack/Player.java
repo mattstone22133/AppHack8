@@ -7,11 +7,13 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Player extends Actor {
 	private LongLight flashLight;
+	private FlashLightLogic flLogic;
 
 	public Player(TextureRegion[][] spriteSheetArg) {
 		super(spriteSheetArg);
 		flashLight = new LongLight();
 		flashLight.setScale(0.7f);
+		flLogic = new FlashLightLogic();
 
 	}
 
@@ -22,7 +24,7 @@ public class Player extends Actor {
 				flashLight.rotateBy(5f);
 			} else if (Gdx.input.isKeyPressed(Input.Keys.K)) {
 				flashLight.rotateBy(-5f);
-
+				
 			}
 		}
 
@@ -47,7 +49,7 @@ public class Player extends Actor {
 	}
 
 	private void checkCollision(Actor enemy) {
-		if(flashLight.collision(this, enemy)){
+		if(flashLight.getOnOff() && flashLight.collision(this, enemy)){
 			// System.out.println("collision detected on enemy" + enemy.toString());
 			if(enemy instanceof Enemy){
 				Enemy enemyCast = (Enemy) enemy;
@@ -78,6 +80,9 @@ public class Player extends Actor {
 		}
 		
 		flashLight.setAngle(angle);
+		flashLight.setOnOff(flLogic.logic());
+
+		
 
 	}
 
@@ -112,6 +117,11 @@ public class Player extends Actor {
 	public float getCenterY() {
 		return sprite.getY() + sprite.getHeight() * scale /2;
 
+	}
+	
+	public void toggleFlashLight(){
+		flLogic.toggle();
+		
 	}
 
 
