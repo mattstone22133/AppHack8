@@ -15,7 +15,7 @@ public class TextureHolder {
 	public static Texture longLight;
 
 	public static void initTextures() {
-		character = new Texture("Zelda16x16packed.png");
+		character = new Texture("Man16x16packed.png");
 		allTextures.add(character);
 		characterSpriteSheet = TextureRegion.split(character, 16, 16);
 
