@@ -10,10 +10,12 @@ public class Home {
 
 	public Home(float x, float y, boolean start) {
 		if (start) {
-			house = new Sprite(TextureHolder.home);
+			house = new Sprite(TextureHolder.bkdone);
 		} else {
 			house = new Sprite(TextureHolder.home);
 		}
+		house.setX(x);
+		house.setY(y);
 		HouseLight = new PointLight();
 		HouseLight.setScale(5f);
 		HouseLight.setXY(house.getX() + house.getWidth() / 2, house.getY());
@@ -44,6 +46,11 @@ public class Home {
 			disappear = true;
 			HouseLight.toggle();
 		}
+	}
+
+	public void setPosition(int i, int j) {
+		HouseLight.setXY(0, 0);
+		house.setPosition(0, 0);
 	}
 
 }

@@ -15,7 +15,7 @@ public class FlashLightLogic {
 	public boolean logic(){
 		long first = 300;
 		long second = 1000;
-		long third = 1500;
+		long third = 1550;
 		long fourth = 1600;
 		long fifth = 1650;
 		long shutoff = 1700;
@@ -23,29 +23,29 @@ public class FlashLightLogic {
 		
 		if(toggle){
 			count += 2;
-			System.out.println(count);
+			//System.out.println(count);
 			//period 1
 			if(count > first && count < first + 50){
 				return false;
 			}
 			
 			//period 2
-			if(count > second && count < second + 50){
+			if(count > second && count < second + 10){
 				return false;
 			}
 			
 			//period 3
-			if(count > third && count < third + 50){
+			if(count > third && count < third + 10){
 				return false;
 			}
 			
 			//period 4
-			if(count > fourth && count < fourth + 50){
+			if(count > fourth && count < fourth + 10){
 				return false;
 			}
 			
 			//period 5
-			if(count > fifth && count < fifth + 50){
+			if(count > fifth && count < fifth + 10){
 				return false;
 			}
 			
@@ -60,7 +60,10 @@ public class FlashLightLogic {
 			//shutoff
 			return true; 
 		} else {
-			count -= 1;
+			if(count <= 0){
+				return false;
+			}
+			count -= 2;
 			return false;
 		}
 	}
