@@ -9,3 +9,8 @@ We used libgdx and followed the shading tutorial http://www.alcove-games.com/ope
 We used 3 simple shaders from that tutorial for blending. Art and sounds were either created or obtained from https://opengameart.org/
 
 Team: Matt, Jayrin, Austin 
+
+
+Before watching the game video, watch about 12 seconds of the follow video of a movie trailer. The video skips to the contextually relevant portion. When the reviewer is done talking about the comments section and shows the scene about the clown. Basically, he compares the evil clown to ronald McDonald going after after you have some burger king. So we transformed that into a game.
+Contextual video: https://youtu.be/_CnXwqetqxw?t=182
+Video of actual game: https://www.youtube.com/watch?v=Jb6PckYXSjw
